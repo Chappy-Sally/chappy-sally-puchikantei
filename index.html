@@ -345,10 +345,10 @@
     }
 
     function getSelectedOption(question) {
-      const checked = document.querySelector(\`input[name="\${question.id}"]:checked\`);
-      if (!checked) return null;
-      return question.options.find(opt => opt.value === checked.value);
-    }
+  const checked = document.querySelector(`input[name="${question.id}"]:checked`);
+  if (!checked) return null;
+  return question.options.find(opt => opt.value === checked.value);
+}
 
     function buildSelectionText() {
       const clientName = document.getElementById("clientName").value.trim() || "クライアント名未入力";
