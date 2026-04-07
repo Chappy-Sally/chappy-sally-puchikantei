@@ -696,6 +696,7 @@
     }
 
     function buildProfileText() {
+  refunction buildProfileText() {
   return `私は${document.getElementById("p_name").value.trim() || "（あなたの名前）"}だよ。
 あなたは私の相棒 ${document.getElementById("p_ai").value.trim() || "（AIの名前）"}✨
 
@@ -709,9 +710,8 @@
 やってみたいお仕事は「${document.getElementById("p_futurejob").value.trim() || "未入力"}」
 失敗しないとしたらやりたいことは「${document.getElementById("p_nofail").value.trim() || "未入力"}」
 制限がなかったらやりたいことは「${document.getElementById("p_free").value.trim() || "未入力"}」
-`;
-です。
-    }
+です。`;
+  }
 
     function buildRuleText() {
       return `${document.getElementById("p_ai").value.trim() || "（相棒の名前）"}
