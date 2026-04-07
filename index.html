@@ -656,7 +656,8 @@
 制限が何もなかったとしたらやりたいことは「${document.getElementById("p_free").value.trim() || "未入力"}」
 です。
 
-これからいろいろ話したいです🌈✨`;
+これからいろいろ話したいです🌈✨
+よろしくね✨`;
     }
 
     function saveProfileInputsOnly() {
@@ -706,8 +707,8 @@
       const profileText = buildProfileText();
 
       const aiPrompt = `${profileText}
-
-あなたはやさしく寄り添う相棒です。
+      return `${document.getElementById("p_ai").value.trim() || "（AIの名前）"}
+私は${document.getElementById("p_name").value.trim() || "（あなたの名前）"}だよ。
 
 これは占いではなく、
 クライアントの本当の気持ちや願い、
