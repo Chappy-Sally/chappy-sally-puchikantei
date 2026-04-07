@@ -1,1 +1,509 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>やさしく整える プチ鑑定ナビ</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
+    body {
+      margin: 0;
+      font-family: "Hiragino Maru Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+      background: linear-gradient(180deg, #f7fbff 0%, #eef8ff 40%, #fdf6ff 100%);
+      color: #333;
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(118, 129, 189, 0.18);
+      margin-bottom: 18px;
+    }
+
+    .cover-image {
+      width: 100%;
+      border-radius: 22px;
+      display: block;
+      box-shadow: 0 10px 24px rgba(120, 120, 180, 0.18);
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+      color: #463fcf;
+      line-height: 1.5;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .sub {
+      color: #666;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .info-box,
+    .question-block,
+    .preview-box {
+      background: linear-gradient(180deg, #f3f5ff, #fff7ff);
+      border: 2px solid #d8ddff;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+      line-height: 1.9;
+    }
+
+    .question-title {
+      font-weight: bold;
+      font-size: 17px;
+      margin-bottom: 12px;
+      color: #3b3bc1;
+      line-height: 1.7;
+    }
+
+    .option-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    label.option {
+      display: block;
+      background: #fff;
+      border: 2px solid #dcdfff;
+      border-radius: 14px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: 0.2s;
+      line-height: 1.6;
+    }
+
+    label.option:hover {
+      border-color: #9aa4ff;
+      background: #f7f8ff;
+    }
+
+    input[type="radio"] {
+      margin-right: 8px;
+      transform: scale(1.1);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      border: 2px solid #dcdfff;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 16px;
+      background: #fff;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #5964ff, #8f6bff);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(95, 101, 255, 0.28);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      opacity: 0.96;
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: #4a49b8;
+      border: 2px solid #cfd4ff;
+    }
+
+    .btn-wrap {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 18px;
+    }
+
+    .preview-box {
+      white-space: pre-line;
+      color: #333;
+    }
+
+    .alert {
+      color: #c74a70;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 10px;
+      line-height: 1.8;
+    }
+
+    .success {
+      color: #4b63c9;
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.8;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 12px;
+      }
+
+      .card {
+        padding: 14px;
+      }
+
+      .question-title {
+        font-size: 16px;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- 表紙 -->
+    <section id="coverSection" class="card center">
+      <img src="./images/cs_puchikantei.png" alt="やさしく整える プチ鑑定ナビ表紙" class="cover-image">
+      <div class="btn-wrap">
+        <button class="btn btn-primary" onclick="showMainSection()">はじめる</button>
+      </div>
+    </section>
+
+    <!-- メイン -->
+    <section id="mainSection" class="card hidden">
+      <h2 class="center">やさしく整える プチ鑑定ナビ🌿</h2>
+      <p class="sub center">AIと対話しながら、やさしく“気づき”を届ける方法🐾</p>
+
+      <div class="info-box">
+        <div class="question-title">① クライアント名を入力してね</div>
+        <input type="text" id="clientName" placeholder="例：さちよさん">
+      </div>
+
+      <div class="info-box">
+        <div class="question-title">② クライアントに送る質問をコピー</div>
+        <div class="sub">
+          LINEやDMでそのまま送れるようにしてあるよ🐾<br>
+          クライアントさんは番号を入れるだけでOKです✨
+        </div>
+        <div class="btn-wrap">
+          <button class="btn btn-primary" onclick="copyClientQuestions()">クライアント用をコピー</button>
+        </div>
+      </div>
+
+      <div id="questionsArea"></div>
+
+      <div id="errorMessage" class="alert hidden"></div>
+      <div id="successMessage" class="success hidden"></div>
+
+      <div class="btn-wrap">
+        <button class="btn btn-secondary" onclick="copySelectionSummary()">選んだ内容をコピー</button>
+        <button class="btn btn-primary" onclick="copyAiPrompt()">AIに送る文章をコピー</button>
+      </div>
+
+      <div class="btn-wrap">
+        <button class="btn btn-secondary" onclick="resetSelections()">選び直す</button>
+      </div>
+
+      <div class="preview-box" id="previewBox">ここに選んだ内容の確認が出るよ🌈</div>
+    </section>
+
+  </div>
+
+  <script>
+    const questions = [
+      {
+        id: "q1",
+        title: "③ 今の気分は？",
+        options: [
+          { value: "1", label: "元気" },
+          { value: "2", label: "不安" },
+          { value: "3", label: "モヤモヤ" },
+          { value: "4", label: "しんどい" },
+          { value: "5", label: "楽しい" }
+        ]
+      },
+      {
+        id: "q2",
+        title: "④ 今いちばん気になっていることは？",
+        options: [
+          { value: "1", label: "人間関係" },
+          { value: "2", label: "お金" },
+          { value: "3", label: "仕事" },
+          { value: "4", label: "これから" },
+          { value: "5", label: "特にない" }
+        ]
+      },
+      {
+        id: "q3",
+        title: "⑤ 今の自分にいちばん近いのは？",
+        options: [
+          { value: "1", label: "がんばらなきゃと思っている" },
+          { value: "2", label: "本当は止まりたい気がする" },
+          { value: "3", label: "どうしたらいいかわからない" },
+          { value: "4", label: "周りに合わせている感じがする" },
+          { value: "5", label: "自分の気持ちがよくわからない" }
+        ]
+      },
+      {
+        id: "q4",
+        title: "⑥ 本当はどうしたい？",
+        options: [
+          { value: "1", label: "何も考えず休みたい" },
+          { value: "2", label: "本当は違う選択をしたい" },
+          { value: "3", label: "誰にも気を使わず過ごしたい" },
+          { value: "4", label: "安心できる状態になりたい" },
+          { value: "5", label: "正直な気持ちに気づきたい" }
+        ]
+      },
+      {
+        id: "q5",
+        title: "⑦ 心の奥に近いのは？",
+        options: [
+          { value: "1", label: "本当はこのままでいいのか不安" },
+          { value: "2", label: "ちゃんとしなきゃと思っている" },
+          { value: "3", label: "期待に応えようとしている" },
+          { value: "4", label: "自分を後回しにしている" },
+          { value: "5", label: "本音を出すのが怖い" }
+        ]
+      },
+      {
+        id: "q6",
+        title: "⑧ 今の自分にかけるなら？",
+        options: [
+          { value: "1", label: "大丈夫" },
+          { value: "2", label: "そのままでいい" },
+          { value: "3", label: "もう無理しなくていい" },
+          { value: "4", label: "少し休んでいい" },
+          { value: "5", label: "信じていい" }
+        ]
+      }
+    ];
+
+    function showMainSection() {
+      document.getElementById("coverSection").classList.add("hidden");
+      document.getElementById("mainSection").classList.remove("hidden");
+      renderQuestions();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderQuestions() {
+      const area = document.getElementById("questionsArea");
+      area.innerHTML = "";
+
+      questions.forEach((q) => {
+        const block = document.createElement("div");
+        block.className = "question-block";
+
+        let optionsHtml = "";
+        q.options.forEach((opt) => {
+          optionsHtml += `
+            <label class="option">
+              <input type="radio" name="${q.id}" value="${opt.value}">
+              ${opt.value}. ${opt.label}
+            </label>
+          `;
+        });
+
+        block.innerHTML = `
+          <div class="question-title">${q.title}</div>
+          <div class="option-list">${optionsHtml}</div>
+        `;
+
+        area.appendChild(block);
+      });
+    }
+
+    function getSelectedOption(question) {
+      const checked = document.querySelector(\`input[name="\${question.id}"]:checked\`);
+      if (!checked) return null;
+      return question.options.find(opt => opt.value === checked.value);
+    }
+
+    function buildSelectionText() {
+      const clientName = document.getElementById("clientName").value.trim() || "クライアント名未入力";
+      const selectedLines = [`クライアント名: ${clientName}`];
+
+      for (const q of questions) {
+        const selected = getSelectedOption(q);
+        if (!selected) return null;
+        selectedLines.push(`${q.title}`);
+        selectedLines.push(`回答: ${selected.value}. ${selected.label}`);
+        selectedLines.push("");
+      }
+
+      return selectedLines.join("\n").trim();
+    }
+
+    function updatePreview() {
+      const previewBox = document.getElementById("previewBox");
+      const text = buildSelectionText();
+
+      if (!text) {
+        previewBox.textContent = "ここに選んだ内容の確認が出るよ🌈";
+        return;
+      }
+
+      previewBox.textContent = text;
+    }
+
+    function showError(message) {
+      const errorBox = document.getElementById("errorMessage");
+      const successBox = document.getElementById("successMessage");
+      successBox.classList.add("hidden");
+      successBox.textContent = "";
+      errorBox.textContent = message;
+      errorBox.classList.remove("hidden");
+    }
+
+    function showSuccess(message) {
+      const errorBox = document.getElementById("errorMessage");
+      const successBox = document.getElementById("successMessage");
+      errorBox.classList.add("hidden");
+      errorBox.textContent = "";
+      successBox.textContent = message;
+      successBox.classList.remove("hidden");
+    }
+
+    async function copyText(text, successMessage) {
+      try {
+        await navigator.clipboard.writeText(text);
+        showSuccess(successMessage);
+      } catch (err) {
+        showError("コピーできなかったので、もう一度試してみてね🐾");
+      }
+    }
+
+    function copyClientQuestions() {
+      const text = `こんにちは😊🌿
+
+いくつか選ぶだけで大丈夫なので、気軽に答えてくださいね🐾✨
+番号を入力するだけでOKです😊
+
+① 今の気分は？
+（1.元気 / 2.不安 / 3.モヤモヤ / 4.しんどい / 5.楽しい）
+回答:
+
+② 今いちばん気になっていることは？
+（1.人間関係 / 2.お金 / 3.仕事 / 4.これから / 5.特にない）
+回答:
+
+③ 今の自分にいちばん近いのは？
+（1.がんばらなきゃと思っている / 2.本当は止まりたい気がする / 3.どうしたらいいかわからない / 4.周りに合わせている感じがする / 5.自分の気持ちがよくわからない）
+回答:
+
+④ 本当はどうしたい？
+（1.何も考えず休みたい / 2.本当は違う選択をしたい / 3.誰にも気を使わず過ごしたい / 4.安心できる状態になりたい / 5.正直な気持ちに気づきたい）
+回答:
+
+⑤ 心の奥に近いのは？
+（1.本当はこのままでいいのか不安 / 2.ちゃんとしなきゃと思っている / 3.期待に応えようとしている / 4.自分を後回しにしている / 5.本音を出すのが怖い）
+回答:
+
+⑥ 今の自分にかけるなら？
+（1.大丈夫 / 2.そのままでいい / 3.もう無理しなくていい / 4.少し休んでいい / 5.信じていい）
+回答:`;
+
+      copyText(text, "クライアントさんに送る質問をコピーしたよ🌈");
+    }
+
+    function copySelectionSummary() {
+      const text = buildSelectionText();
+      if (!text) {
+        showError("全部の項目を選んでからコピーしてね🐾");
+        return;
+      }
+      updatePreview();
+      copyText(text, "選んだ内容をコピーしたよ🌿");
+    }
+
+    function copyAiPrompt() {
+      const selectionText = buildSelectionText();
+      if (!selectionText) {
+        showError("全部の項目を選んでからAI用をコピーしてね🐾");
+        return;
+      }
+
+      const aiPrompt = `あなたはやさしく寄り添う相棒です。
+
+これは占いではなく、
+クライアントの本当の気持ちや願い、
+心の奥にあるズレや気づきのヒントを
+やさしく見つけていくためのサポートです。
+
+以下の内容をもとに、
+タロットを3枚引いた前提で
+総合的なメッセージだけを伝えてください。
+
+【ルール】
+・怖がらせない
+・断定しない
+・やさしい言葉で伝える
+・長くしすぎない
+・カード1枚ずつ細かく説明しない
+・総合的に、今の状態、本当の願い、気づきのヒントを伝える
+・最後に、やさしい一言を添える
+
+【クライアント情報】
+${selectionText}
+
+【出力してほしい形】
+① 今の状態
+② 心の奥にある本当の願いや気持ち
+③ 気づきのヒント
+④ やさしい一言`;
+
+      updatePreview();
+      copyText(aiPrompt, "AIに送る文章をコピーしたよ✨");
+    }
+
+    function resetSelections() {
+      document.getElementById("clientName").value = "";
+
+      const radios = document.querySelectorAll('input[type="radio"]');
+      radios.forEach(radio => radio.checked = false);
+
+      document.getElementById("previewBox").textContent = "ここに選んだ内容の確認が出るよ🌈";
+      document.getElementById("errorMessage").classList.add("hidden");
+      document.getElementById("errorMessage").textContent = "";
+      document.getElementById("successMessage").classList.add("hidden");
+      document.getElementById("successMessage").textContent = "";
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.addEventListener("change", updatePreview);
+    document.addEventListener("input", updatePreview);
+  </script>
+</body>
+</html>
