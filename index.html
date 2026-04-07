@@ -60,7 +60,7 @@
     .info-box,
     .question-block,
     .preview-box,
-    .box,
+    .profile-box,
     .prompt-box {
       background: linear-gradient(180deg, #f3f5ff, #fff7ff);
       border: 2px solid #d8ddff;
@@ -70,8 +70,7 @@
       line-height: 1.9;
     }
 
-    .question-title,
-    .page-title {
+    .question-title {
       font-weight: bold;
       font-size: 17px;
       margin-bottom: 12px;
@@ -79,30 +78,20 @@
       line-height: 1.7;
     }
 
-    .page-title {
-      font-size: 22px;
-      text-align: center;
-      margin-bottom: 18px;
-    }
-
     .option-list {
       display: grid;
       gap: 10px;
     }
 
-    label.option,
-    .label {
-      display: block;
-      line-height: 1.6;
-    }
-
     label.option {
+      display: block;
       background: #fff;
       border: 2px solid #dcdfff;
       border-radius: 14px;
       padding: 12px 14px;
       cursor: pointer;
       transition: 0.2s;
+      line-height: 1.6;
     }
 
     label.option:hover {
@@ -114,7 +103,8 @@
       font-weight: bold;
       margin-top: 12px;
       margin-bottom: 6px;
-      color: #4b55b5;
+      color: #4f55b7;
+      line-height: 1.7;
     }
 
     input[type="radio"] {
@@ -129,7 +119,6 @@
       padding: 14px;
       font-size: 16px;
       background: #fff;
-      margin-bottom: 6px;
     }
 
     .btn {
@@ -160,39 +149,6 @@
       background: #fff;
       color: #4a49b8;
       border: 2px solid #cfd4ff;
-    }
-
-    .btn-pink {
-      background: linear-gradient(135deg, #ff84b7, #ff9fd0);
-      color: #fff;
-      border: none;
-      border-radius: 999px;
-      padding: 14px 22px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .btn-orange {
-      background: linear-gradient(135deg, #ffb25b, #ffc977);
-      color: #fff;
-      border: none;
-      border-radius: 999px;
-      padding: 14px 22px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .btn-purple {
-      background: linear-gradient(135deg, #8f6bff, #b18cff);
-      color: #fff;
-      border: none;
-      border-radius: 999px;
-      padding: 14px 22px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
     }
 
     .btn-wrap {
@@ -241,15 +197,11 @@
         padding: 14px;
       }
 
-      .question-title,
-      .page-title {
+      .question-title {
         font-size: 16px;
       }
 
-      .btn,
-      .btn-pink,
-      .btn-orange,
-      .btn-purple {
+      .btn {
         width: 100%;
       }
     }
@@ -262,16 +214,16 @@
     <section id="coverSection" class="card center">
       <img src="./images/cs_puchikantei.png" alt="やさしく整える プチ鑑定ナビ表紙" class="cover-image">
       <div class="btn-wrap">
-        <button class="btn btn-secondary" onclick="showProfileScreen()">AIと仲良くなる🌿</button>
+        <button class="btn btn-secondary" onclick="showProfileSection()">AIと仲良くなる🌿</button>
         <button class="btn btn-primary" onclick="showMainSection()">はじめる</button>
       </div>
     </section>
 
-    <!-- 自己紹介＆質問画面 -->
-    <section id="profileScreen" class="card hidden">
-      <div class="page-title">🌿 自己紹介＆質問</div>
+    <!-- 自己紹介＆質問 -->
+    <section id="profileSection" class="card hidden">
+      <h2 class="center">自己紹介＆質問🌿</h2>
 
-      <div class="box">
+      <div class="profile-box">
         <p class="desc">
           思いつくままで大丈夫😊<br>
           空欄があってもOKだよ🐾
@@ -305,18 +257,24 @@
         <input type="text" id="p_free" placeholder="">
       </div>
 
-      <div class="box">
-        <div class="btn-wrap">
-          <button class="btn-pink" onclick="generateProfile()">文章をつくる🐾</button>
-          <button class="btn-orange" onclick="copyProfile()">コピーする🌈</button>
-          <button class="btn-purple" onclick="closeProfile()">戻る</button>
-        </div>
+      <div id="profileErrorMessage" class="alert hidden"></div>
+      <div id="profileSuccessMessage" class="success hidden"></div>
 
-        <div id="profileResult" class="prompt-box hidden"></div>
+      <div class="btn-wrap">
+        <button class="btn btn-secondary" onclick="saveProfile()">保存する</button>
+        <button class="btn btn-primary" onclick="generateProfile()">文章をつくる🐾</button>
+        <button class="btn btn-primary" onclick="copyProfile()">AI用をコピー🌈</button>
+      </div>
 
-        <div class="small-note">
-          入力内容は保存されるから、次に開いたときも見られるよ😊
-        </div>
+      <div class="btn-wrap">
+        <button class="btn btn-secondary" onclick="backToCoverFromProfile()">戻る</button>
+        <button class="btn btn-primary" onclick="goMainFromProfile()">次へ</button>
+      </div>
+
+      <div id="profileResult" class="prompt-box hidden"></div>
+
+      <div class="small-note">
+        入力内容は保存されるから、次に開いたときも見られるよ😊
       </div>
     </section>
 
@@ -353,6 +311,7 @@
 
       <div class="btn-wrap">
         <button class="btn btn-secondary" onclick="resetSelections()">選び直す</button>
+        <button class="btn btn-secondary" onclick="backToCoverFromMain()">表紙に戻る</button>
       </div>
 
       <div class="preview-box" id="previewBox">ここに選んだ内容の確認が出るよ🌈</div>
@@ -430,24 +389,50 @@
       }
     ];
 
+    const profileIds = [
+      "p_name",
+      "p_ai",
+      "p_like",
+      "p_dislike",
+      "p_place",
+      "p_job",
+      "p_futurejob",
+      "p_nofail",
+      "p_free"
+    ];
+
+    function showProfileSection() {
+      document.getElementById("coverSection").classList.add("hidden");
+      document.getElementById("mainSection").classList.add("hidden");
+      document.getElementById("profileSection").classList.remove("hidden");
+      loadProfileInputs();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     function showMainSection() {
       document.getElementById("coverSection").classList.add("hidden");
-      document.getElementById("profileScreen").classList.add("hidden");
+      document.getElementById("profileSection").classList.add("hidden");
       document.getElementById("mainSection").classList.remove("hidden");
       renderQuestions();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function showProfileScreen() {
-      document.getElementById("coverSection").classList.add("hidden");
-      document.getElementById("mainSection").classList.add("hidden");
-      document.getElementById("profileScreen").classList.remove("hidden");
-      loadProfileInputs();
+    function backToCoverFromProfile() {
+      document.getElementById("profileSection").classList.add("hidden");
+      document.getElementById("coverSection").classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function closeProfile() {
-      document.getElementById("profileScreen").classList.add("hidden");
+    function goMainFromProfile() {
+      saveProfileInputsOnly();
+      document.getElementById("profileSection").classList.add("hidden");
+      document.getElementById("mainSection").classList.remove("hidden");
+      renderQuestions();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function backToCoverFromMain() {
+      document.getElementById("mainSection").classList.add("hidden");
       document.getElementById("coverSection").classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -530,12 +515,38 @@
       successBox.classList.remove("hidden");
     }
 
-    async function copyText(text, successMessage) {
+    function showProfileError(message) {
+      const errorBox = document.getElementById("profileErrorMessage");
+      const successBox = document.getElementById("profileSuccessMessage");
+      successBox.classList.add("hidden");
+      successBox.textContent = "";
+      errorBox.textContent = message;
+      errorBox.classList.remove("hidden");
+    }
+
+    function showProfileSuccess(message) {
+      const errorBox = document.getElementById("profileErrorMessage");
+      const successBox = document.getElementById("profileSuccessMessage");
+      errorBox.classList.add("hidden");
+      errorBox.textContent = "";
+      successBox.textContent = message;
+      successBox.classList.remove("hidden");
+    }
+
+    async function copyText(text, successMessage, mode = "main") {
       try {
         await navigator.clipboard.writeText(text);
-        showSuccess(successMessage);
+        if (mode === "profile") {
+          showProfileSuccess(successMessage);
+        } else {
+          showSuccess(successMessage);
+        }
       } catch (err) {
-        showError("コピーできなかったので、もう一度試してみてね🐾");
+        if (mode === "profile") {
+          showProfileError("コピーできなかったので、もう一度試してみてね🐾");
+        } else {
+          showError("コピーできなかったので、もう一度試してみてね🐾");
+        }
       }
     }
 
@@ -582,6 +593,76 @@
       copyText(text, "選んだ内容をコピーしたよ🌿");
     }
 
+    function buildProfileText() {
+      return `こんにちは😊
+私は${document.getElementById("p_name").value.trim() || "（あなたの名前）"}です。
+
+これから、やさしく寄り添いながら
+気づきのヒントを届ける相棒として
+手伝ってください🌿
+
+あなたの名前は${document.getElementById("p_ai").value.trim() || "（AIの名前）"}です。
+
+私は、
+好きなものは「${document.getElementById("p_like").value.trim() || "未入力"}」
+苦手なものは「${document.getElementById("p_dislike").value.trim() || "未入力"}」
+行きたいところは「${document.getElementById("p_place").value.trim() || "未入力"}」
+現在のお仕事は「${document.getElementById("p_job").value.trim() || "未入力"}」
+やってみたいお仕事は「${document.getElementById("p_futurejob").value.trim() || "未入力"}」
+失敗しないとしたらやってみたいことは「${document.getElementById("p_nofail").value.trim() || "未入力"}」
+制限が何もなかったとしたらやりたいことは「${document.getElementById("p_free").value.trim() || "未入力"}」
+です。
+
+これからのやりとりでは、
+
+・怖くしない
+・決めつけない
+・やさしい言葉で伝える
+・本音や願いに気づけるようにする
+
+この4つを大切にしてください🐾
+
+まずは、この役割を理解して
+相棒としてスタンバイしてください✨`;
+    }
+
+    function saveProfileInputsOnly() {
+      profileIds.forEach(id => {
+        const el = document.getElementById(id);
+        localStorage.setItem(id, el.value);
+      });
+    }
+
+    function loadProfileInputs() {
+      profileIds.forEach(id => {
+        const saved = localStorage.getItem(id);
+        document.getElementById(id).value = saved || "";
+      });
+    }
+
+    function saveProfile() {
+      saveProfileInputsOnly();
+      showProfileSuccess("入力内容を保存したよ🌿✨");
+    }
+
+    function generateProfile() {
+      saveProfileInputsOnly();
+      const text = buildProfileText();
+      const box = document.getElementById("profileResult");
+      box.textContent = text;
+      box.classList.remove("hidden");
+      showProfileSuccess("AIと仲良くなる文章をつくったよ🐾");
+    }
+
+    function copyProfile() {
+      saveProfileInputsOnly();
+      const text = buildProfileText();
+      const box = document.getElementById("profileResult");
+      box.textContent = text;
+      box.classList.remove("hidden");
+      copyText(text, "AIと仲良くなる文章をコピーしたよ🌈", "profile");
+    }
+
     function copyAiPrompt() {
       const selectionText = buildSelectionText();
       if (!selectionText) {
@@ -589,7 +670,11 @@
         return;
       }
 
-      const aiPrompt = `あなたはやさしく寄り添う相棒です。
+      const profileText = buildProfileText();
+
+      const aiPrompt = `${profileText}
+
+あなたはやさしく寄り添う相棒です。
 
 これは占いではなく、
 クライアントの本当の気持ちや願い、
@@ -625,7 +710,7 @@ ${selectionText}
     function resetSelections() {
       document.getElementById("clientName").value = "";
 
-      const radios = document.querySelectorAll('input[type="radio"]');
+      const radios = document.querySelectorAll('#mainSection input[type="radio"]');
       radios.forEach(radio => radio.checked = false);
 
       document.getElementById("previewBox").textContent = "ここに選んだ内容の確認が出るよ🌈";
@@ -637,88 +722,16 @@ ${selectionText}
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function saveProfileInputs() {
-      const ids = ["p_name", "p_ai", "p_like", "p_dislike", "p_place", "p_job", "p_futurejob", "p_nofail", "p_free"];
-      ids.forEach(id => {
-        localStorage.setItem(id, document.getElementById(id).value);
-      });
-    }
-
-    function loadProfileInputs() {
-      const ids = ["p_name", "p_ai", "p_like", "p_dislike", "p_place", "p_job", "p_futurejob", "p_nofail", "p_free"];
-      ids.forEach(id => {
-        const saved = localStorage.getItem(id);
-        if (saved !== null) {
-          document.getElementById(id).value = saved;
-        }
-      });
-    }
-
-    function generateProfile() {
-      saveProfileInputs();
-
-      const name = document.getElementById("p_name").value.trim();
-      const ai = document.getElementById("p_ai").value.trim();
-      const like = document.getElementById("p_like").value.trim();
-      const dislike = document.getElementById("p_dislike").value.trim();
-      const place = document.getElementById("p_place").value.trim();
-      const job = document.getElementById("p_job").value.trim();
-      const futurejob = document.getElementById("p_futurejob").value.trim();
-      const nofail = document.getElementById("p_nofail").value.trim();
-      const free = document.getElementById("p_free").value.trim();
-
-      const text = `こんにちは😊
-私は${name || "（あなたの名前）"}です。
-
-これから、やさしく寄り添いながら
-気づきのヒントを届ける相棒として
-手伝ってください🌿
-
-あなたの名前は${ai || "（AIの名前）"}です。
-
-私は、
-好きなものは「${like || "未入力"}」
-苦手なものは「${dislike || "未入力"}」
-行きたいところは「${place || "未入力"}」
-現在のお仕事は「${job || "未入力"}」
-やってみたいお仕事は「${futurejob || "未入力"}」
-失敗しないとしたらやってみたいことは「${nofail || "未入力"}」
-制限が何もなかったとしたらやりたいことは「${free || "未入力"}」
-です。
-
-これからのやりとりでは、
-
-・怖くしない
-・決めつけない
-・やさしい言葉で伝える
-・本音や願いに気づけるようにする
-
-この4つを大切にしてください🐾
-
-まずは、この役割を理解して
-相棒としてスタンバイしてください✨`;
-
-      const box = document.getElementById("profileResult");
-      box.textContent = text;
-      box.classList.remove("hidden");
-    }
-
-    function copyProfile() {
-      const box = document.getElementById("profileResult");
-      if (box.classList.contains("hidden") || !box.textContent.trim()) {
-        showError("先に文章をつくってからコピーしてね🐾");
-        return;
-      }
-      copyText(box.textContent, "AIと仲良くなる文章をコピーしたよ🌈");
-    }
+    window.onload = function() {
+      loadProfileInputs();
+    };
 
     document.addEventListener("change", updatePreview);
     document.addEventListener("input", function(e) {
       updatePreview();
 
-      const profileIds = ["p_name", "p_ai", "p_like", "p_dislike", "p_place", "p_job", "p_futurejob", "p_nofail", "p_free"];
       if (profileIds.includes(e.target.id)) {
-        saveProfileInputs();
+        saveProfileInputsOnly();
       }
     });
   </script>
