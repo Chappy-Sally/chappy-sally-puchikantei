@@ -59,7 +59,9 @@
 
     .info-box,
     .question-block,
-    .preview-box {
+    .preview-box,
+    .box,
+    .prompt-box {
       background: linear-gradient(180deg, #f3f5ff, #fff7ff);
       border: 2px solid #d8ddff;
       border-radius: 18px;
@@ -68,7 +70,8 @@
       line-height: 1.9;
     }
 
-    .question-title {
+    .question-title,
+    .page-title {
       font-weight: bold;
       font-size: 17px;
       margin-bottom: 12px;
@@ -76,25 +79,42 @@
       line-height: 1.7;
     }
 
+    .page-title {
+      font-size: 22px;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
     .option-list {
       display: grid;
       gap: 10px;
     }
 
-    label.option {
+    label.option,
+    .label {
       display: block;
+      line-height: 1.6;
+    }
+
+    label.option {
       background: #fff;
       border: 2px solid #dcdfff;
       border-radius: 14px;
       padding: 12px 14px;
       cursor: pointer;
       transition: 0.2s;
-      line-height: 1.6;
     }
 
     label.option:hover {
       border-color: #9aa4ff;
       background: #f7f8ff;
+    }
+
+    .label {
+      font-weight: bold;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      color: #4b55b5;
     }
 
     input[type="radio"] {
@@ -109,6 +129,7 @@
       padding: 14px;
       font-size: 16px;
       background: #fff;
+      margin-bottom: 6px;
     }
 
     .btn {
@@ -141,6 +162,39 @@
       border: 2px solid #cfd4ff;
     }
 
+    .btn-pink {
+      background: linear-gradient(135deg, #ff84b7, #ff9fd0);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-orange {
+      background: linear-gradient(135deg, #ffb25b, #ffc977);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-purple {
+      background: linear-gradient(135deg, #8f6bff, #b18cff);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
     .btn-wrap {
       display: flex;
       gap: 12px;
@@ -149,9 +203,17 @@
       margin-top: 18px;
     }
 
-    .preview-box {
+    .preview-box,
+    .prompt-box {
       white-space: pre-line;
       color: #333;
+    }
+
+    .desc,
+    .small-note {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.8;
     }
 
     .alert {
@@ -179,11 +241,15 @@
         padding: 14px;
       }
 
-      .question-title {
+      .question-title,
+      .page-title {
         font-size: 16px;
       }
 
-      .btn {
+      .btn,
+      .btn-pink,
+      .btn-orange,
+      .btn-purple {
         width: 100%;
       }
     }
@@ -196,7 +262,61 @@
     <section id="coverSection" class="card center">
       <img src="./images/cs_puchikantei.png" alt="やさしく整える プチ鑑定ナビ表紙" class="cover-image">
       <div class="btn-wrap">
+        <button class="btn btn-secondary" onclick="showProfileScreen()">AIと仲良くなる🌿</button>
         <button class="btn btn-primary" onclick="showMainSection()">はじめる</button>
+      </div>
+    </section>
+
+    <!-- 自己紹介＆質問画面 -->
+    <section id="profileScreen" class="card hidden">
+      <div class="page-title">🌿 自己紹介＆質問</div>
+
+      <div class="box">
+        <p class="desc">
+          思いつくままで大丈夫😊<br>
+          空欄があってもOKだよ🐾
+        </p>
+
+        <div class="label">あなたの名前</div>
+        <input type="text" id="p_name" placeholder="例：さちよ">
+
+        <div class="label">AIの名前</div>
+        <input type="text" id="p_ai" placeholder="例：チャッピー">
+
+        <div class="label">好きなもの（,で好きなだけ）</div>
+        <input type="text" id="p_like" placeholder="例：お寿司,旅行,ドラマ">
+
+        <div class="label">苦手なもの（,で好きなだけ）</div>
+        <input type="text" id="p_dislike" placeholder="例：人混み,急かされること">
+
+        <div class="label">行きたいところ</div>
+        <input type="text" id="p_place" placeholder="例：ハワイ">
+
+        <div class="label">現在のお仕事</div>
+        <input type="text" id="p_job" placeholder="">
+
+        <div class="label">やってみたいお仕事</div>
+        <input type="text" id="p_futurejob" placeholder="">
+
+        <div class="label">失敗しないとしたらやってみたいこと</div>
+        <input type="text" id="p_nofail" placeholder="">
+
+        <div class="label">制限が何もなかったとしたらやりたいこと</div>
+        <input type="text" id="p_free" placeholder="">
+      </div>
+
+      <div class="box">
+        <div class="btn-wrap">
+          <button class="btn-pink" onclick="generateProfile()">文章をつくる🐾</button>
+          <button class="btn-orange" onclick="copyProfile()">コピーする🌈</button>
+          <button class="btn-purple" onclick="closeProfile()">戻る</button>
+        </div>
+
+        <div id="profileResult" class="prompt-box hidden"></div>
+
+        <div class="small-note">
+          入力内容は保存されるから、次に開いたときも見られるよ😊
+        </div>
       </div>
     </section>
 
@@ -312,8 +432,23 @@
 
     function showMainSection() {
       document.getElementById("coverSection").classList.add("hidden");
+      document.getElementById("profileScreen").classList.add("hidden");
       document.getElementById("mainSection").classList.remove("hidden");
       renderQuestions();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showProfileScreen() {
+      document.getElementById("coverSection").classList.add("hidden");
+      document.getElementById("mainSection").classList.add("hidden");
+      document.getElementById("profileScreen").classList.remove("hidden");
+      loadProfileInputs();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function closeProfile() {
+      document.getElementById("profileScreen").classList.add("hidden");
+      document.getElementById("coverSection").classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -345,10 +480,10 @@
     }
 
     function getSelectedOption(question) {
-  const checked = document.querySelector(`input[name="${question.id}"]:checked`);
-  if (!checked) return null;
-  return question.options.find(opt => opt.value === checked.value);
-}
+      const checked = document.querySelector(`input[name="${question.id}"]:checked`);
+      if (!checked) return null;
+      return question.options.find(opt => opt.value === checked.value);
+    }
 
     function buildSelectionText() {
       const clientName = document.getElementById("clientName").value.trim() || "クライアント名未入力";
@@ -502,8 +637,90 @@ ${selectionText}
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    function saveProfileInputs() {
+      const ids = ["p_name", "p_ai", "p_like", "p_dislike", "p_place", "p_job", "p_futurejob", "p_nofail", "p_free"];
+      ids.forEach(id => {
+        localStorage.setItem(id, document.getElementById(id).value);
+      });
+    }
+
+    function loadProfileInputs() {
+      const ids = ["p_name", "p_ai", "p_like", "p_dislike", "p_place", "p_job", "p_futurejob", "p_nofail", "p_free"];
+      ids.forEach(id => {
+        const saved = localStorage.getItem(id);
+        if (saved !== null) {
+          document.getElementById(id).value = saved;
+        }
+      });
+    }
+
+    function generateProfile() {
+      saveProfileInputs();
+
+      const name = document.getElementById("p_name").value.trim();
+      const ai = document.getElementById("p_ai").value.trim();
+      const like = document.getElementById("p_like").value.trim();
+      const dislike = document.getElementById("p_dislike").value.trim();
+      const place = document.getElementById("p_place").value.trim();
+      const job = document.getElementById("p_job").value.trim();
+      const futurejob = document.getElementById("p_futurejob").value.trim();
+      const nofail = document.getElementById("p_nofail").value.trim();
+      const free = document.getElementById("p_free").value.trim();
+
+      const text = `こんにちは😊
+私は${name || "（あなたの名前）"}です。
+
+これから、やさしく寄り添いながら
+気づきのヒントを届ける相棒として
+手伝ってください🌿
+
+あなたの名前は${ai || "（AIの名前）"}です。
+
+私は、
+好きなものは「${like || "未入力"}」
+苦手なものは「${dislike || "未入力"}」
+行きたいところは「${place || "未入力"}」
+現在のお仕事は「${job || "未入力"}」
+やってみたいお仕事は「${futurejob || "未入力"}」
+失敗しないとしたらやってみたいことは「${nofail || "未入力"}」
+制限が何もなかったとしたらやりたいことは「${free || "未入力"}」
+です。
+
+これからのやりとりでは、
+
+・怖くしない
+・決めつけない
+・やさしい言葉で伝える
+・本音や願いに気づけるようにする
+
+この4つを大切にしてください🐾
+
+まずは、この役割を理解して
+相棒としてスタンバイしてください✨`;
+
+      const box = document.getElementById("profileResult");
+      box.textContent = text;
+      box.classList.remove("hidden");
+    }
+
+    function copyProfile() {
+      const box = document.getElementById("profileResult");
+      if (box.classList.contains("hidden") || !box.textContent.trim()) {
+        showError("先に文章をつくってからコピーしてね🐾");
+        return;
+      }
+      copyText(box.textContent, "AIと仲良くなる文章をコピーしたよ🌈");
+    }
+
     document.addEventListener("change", updatePreview);
-    document.addEventListener("input", updatePreview);
+    document.addEventListener("input", function(e) {
+      updatePreview();
+
+      const profileIds = ["p_name", "p_ai", "p_like", "p_dislike", "p_place", "p_job", "p_futurejob", "p_nofail", "p_free"];
+      if (profileIds.includes(e.target.id)) {
+        saveProfileInputs();
+      }
+    });
   </script>
 </body>
 </html>
