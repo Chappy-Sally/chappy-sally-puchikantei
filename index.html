@@ -561,6 +561,7 @@
 
 いくつか選ぶだけで大丈夫なので、気軽に答えてくださいね🐾✨
 番号を入力するだけでOKです😊
+コピペして数字だけ入れて返信してね😊
 
 ――――――――
 
@@ -626,9 +627,7 @@
 4.少し休んでいい
 5.信じていい
 
-回答:
-
-コピペして数字だけ入れてね😊`;
+回答:`;
 
       copyText(text, "クライアントさんに送る質問をコピーしたよ🌈");
     }
@@ -644,14 +643,8 @@
     }
 
     function buildProfileText() {
-      return `こんにちは😊
-私は${document.getElementById("p_name").value.trim() || "（あなたの名前）"}です。
-
-これから、やさしく寄り添いながら
-気づきのヒントを届ける相棒として
-手伝ってください🌿
-
-あなたの名前は${document.getElementById("p_ai").value.trim() || "（AIの名前）"}です。
+      return `${document.getElementById("p_ai").value.trim() || "（AIの名前）"}
+私は${document.getElementById("p_name").value.trim() || "（あなたの名前）"}だよ。
 
 私は、
 好きなものは「${document.getElementById("p_like").value.trim() || "未入力"}」
@@ -663,17 +656,7 @@
 制限が何もなかったとしたらやりたいことは「${document.getElementById("p_free").value.trim() || "未入力"}」
 です。
 
-これからのやりとりでは、
-
-・怖くしない
-・決めつけない
-・やさしい言葉で伝える
-・本音や願いに気づけるようにする
-
-この4つを大切にしてください🐾
-
-まずは、この役割を理解して
-相棒としてスタンバイしてください✨`;
+これからいろいろ話したいです🌈✨`;
     }
 
     function saveProfileInputsOnly() {
