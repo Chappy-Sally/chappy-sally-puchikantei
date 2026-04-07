@@ -61,7 +61,8 @@
     .question-block,
     .preview-box,
     .profile-box,
-    .prompt-box {
+    .prompt-box,
+    .rule-box {
       background: linear-gradient(180deg, #f3f5ff, #fff7ff);
       border: 2px solid #d8ddff;
       border-radius: 18px;
@@ -160,7 +161,8 @@
     }
 
     .preview-box,
-    .prompt-box {
+    .prompt-box,
+    .rule-box {
       white-space: pre-line;
       color: #333;
     }
@@ -213,16 +215,36 @@
     <!-- 表紙 -->
     <section id="coverSection" class="card center">
       <img src="./images/cs_puchikantei.png" alt="やさしく整える プチ鑑定ナビ表紙" class="cover-image">
-      
-     <div class="btn-wrap">
-          <button class="btn btn-secondary" onclick="copyClientQuestions()">
-          📩 クライアント用質問をコピー </button>
-          <button class="btn btn-secondary" onclick="showProfileSection()">
-           AIと仲良くなる🌿 </button>
-          <button class="btn btn-primary" onclick="showMainSection()">
-           はじめる </button>
-     </div>
-      
+
+      <div class="btn-wrap">
+        <button class="btn btn-secondary" onclick="copyClientQuestions()">
+          📩 クライアント用質問をコピー
+        </button>
+        <button class="btn btn-secondary" onclick="showRuleSection()">
+          鑑定のお約束
+        </button>
+        <button class="btn btn-secondary" onclick="showProfileSection()">
+          AIと仲良くなる🌿
+        </button>
+        <button class="btn btn-primary" onclick="showMainSection()">
+          はじめる
+        </button>
+      </div>
+    </section>
+
+    <!-- 鑑定のお約束 -->
+    <section id="ruleSection" class="card hidden">
+      <h2 class="center">AIとのお約束🌿</h2>
+
+      <div class="rule-box" id="ruleTextBox">ここに鑑定のお約束が出るよ🌈</div>
+
+      <div id="ruleErrorMessage" class="alert hidden"></div>
+      <div id="ruleSuccessMessage" class="success hidden"></div>
+
+      <div class="btn-wrap">
+        <button class="btn btn-primary" onclick="copyRuleText()">お約束をコピー</button>
+        <button class="btn btn-secondary" onclick="backToCoverFromRule()">戻る</button>
+      </div>
     </section>
 
     <!-- 自己紹介＆質問 -->
@@ -311,7 +333,6 @@
       <div id="successMessage" class="success hidden"></div>
 
       <div class="btn-wrap">
-        <button class="btn btn-secondary" onclick="copySelectionSummary()">選んだ内容をコピー</button>
         <button class="btn btn-primary" onclick="copyAiPrompt()">AIに送る文章をコピー</button>
       </div>
 
@@ -408,39 +429,57 @@
     ];
 
     function showProfileSection() {
-      document.getElementById("coverSection").classList.add("hidden");
-      document.getElementById("mainSection").classList.add("hidden");
+      hideAllSections();
       document.getElementById("profileSection").classList.remove("hidden");
       loadProfileInputs();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    function showRuleSection() {
+      hideAllSections();
+      document.getElementById("ruleSection").classList.remove("hidden");
+      document.getElementById("ruleTextBox").textContent = buildRuleText();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     function showMainSection() {
-      document.getElementById("coverSection").classList.add("hidden");
-      document.getElementById("profileSection").classList.add("hidden");
+      hideAllSections();
       document.getElementById("mainSection").classList.remove("hidden");
       renderQuestions();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function backToCoverFromProfile() {
-      document.getElementById("profileSection").classList.add("hidden");
+      hideAllSections();
+      document.getElementById("coverSection").classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function backToCoverFromRule() {
+      hideAllSections();
       document.getElementById("coverSection").classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function goMainFromProfile() {
       saveProfileInputsOnly();
-      document.getElementById("profileSection").classList.add("hidden");
+      hideAllSections();
       document.getElementById("mainSection").classList.remove("hidden");
       renderQuestions();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function backToCoverFromMain() {
-      document.getElementById("mainSection").classList.add("hidden");
+      hideAllSections();
       document.getElementById("coverSection").classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function hideAllSections() {
+      document.getElementById("coverSection").classList.add("hidden");
+      document.getElementById("profileSection").classList.add("hidden");
+      document.getElementById("ruleSection").classList.add("hidden");
+      document.getElementById("mainSection").classList.add("hidden");
     }
 
     function renderQuestions() {
@@ -478,29 +517,31 @@
 
     function buildSelectionText() {
       const clientName = document.getElementById("clientName").value.trim() || "クライアント名未入力";
-      const selectedLines = [`クライアント名: ${clientName}`];
+      const selectedLines = [];
 
       for (const q of questions) {
         const selected = getSelectedOption(q);
         if (!selected) return null;
         selectedLines.push(`${q.title}`);
         selectedLines.push(`回答: ${selected.value}. ${selected.label}`);
-        selectedLines.push("");
       }
 
-      return selectedLines.join("\n").trim();
+      return {
+        clientName,
+        answersText: selectedLines.join("\n")
+      };
     }
 
     function updatePreview() {
       const previewBox = document.getElementById("previewBox");
-      const text = buildSelectionText();
+      const result = buildSelectionText();
 
-      if (!text) {
+      if (!result) {
         previewBox.textContent = "ここに選んだ内容の確認が出るよ🌈";
         return;
       }
 
-      previewBox.textContent = text;
+      previewBox.textContent = `クライアント名: ${result.clientName}\n${result.answersText}`;
     }
 
     function showError(message) {
@@ -539,17 +580,39 @@
       successBox.classList.remove("hidden");
     }
 
+    function showRuleError(message) {
+      const errorBox = document.getElementById("ruleErrorMessage");
+      const successBox = document.getElementById("ruleSuccessMessage");
+      successBox.classList.add("hidden");
+      successBox.textContent = "";
+      errorBox.textContent = message;
+      errorBox.classList.remove("hidden");
+    }
+
+    function showRuleSuccess(message) {
+      const errorBox = document.getElementById("ruleErrorMessage");
+      const successBox = document.getElementById("ruleSuccessMessage");
+      errorBox.classList.add("hidden");
+      errorBox.textContent = "";
+      successBox.textContent = message;
+      successBox.classList.remove("hidden");
+    }
+
     async function copyText(text, successMessage, mode = "main") {
       try {
         await navigator.clipboard.writeText(text);
         if (mode === "profile") {
           showProfileSuccess(successMessage);
+        } else if (mode === "rule") {
+          showRuleSuccess(successMessage);
         } else {
           showSuccess(successMessage);
         }
       } catch (err) {
         if (mode === "profile") {
           showProfileError("コピーできなかったので、もう一度試してみてね🐾");
+        } else if (mode === "rule") {
+          showRuleError("コピーできなかったので、もう一度試してみてね🐾");
         } else {
           showError("コピーできなかったので、もう一度試してみてね🐾");
         }
@@ -632,16 +695,6 @@
       copyText(text, "クライアントさんに送る質問をコピーしたよ🌈");
     }
 
-    function copySelectionSummary() {
-      const text = buildSelectionText();
-      if (!text) {
-        showError("全部の項目を選んでからコピーしてね🐾");
-        return;
-      }
-      updatePreview();
-      copyText(text, "選んだ内容をコピーしたよ🌿");
-    }
-
     function buildProfileText() {
       return `${document.getElementById("p_ai").value.trim() || "（AIの名前）"}
 私は${document.getElementById("p_name").value.trim() || "（あなたの名前）"}だよ。
@@ -658,6 +711,37 @@
 
 これからいろいろ話したいです🌈✨
 よろしくね✨`;
+    }
+
+    function buildRuleText() {
+      return `${document.getElementById("p_ai").value.trim() || "（相棒の名前）"}
+${document.getElementById("p_name").value.trim() || "（自分の名前）"}だよ。
+
+これは占いではなくて
+クライアントの本当の気持ちや願い、
+心の奥にあるズレや気づきのヒントを
+やさしく見つけていくためのサポートです。
+
+あとからクライアントの情報を送るので
+タロットを3枚引いた前提で
+総合的なメッセージだけを伝えてください。
+
+【ルール】
+・怖がらせない
+・断定しない
+・やさしい言葉で伝える
+・長くしすぎない
+・カード1枚ずつ細かく説明しない
+・総合的に、今の状態、本当の願い、気づきのヒントを伝える
+・最後に、やさしい一言を添える
+
+【出力してほしい形】
+① 今の状態
+② 心の奥にある本当の願いや気持ち
+③ 気づきのヒント
+④ やさしい一言
+
+でお願いします。`;
     }
 
     function saveProfileInputsOnly() {
@@ -697,45 +781,29 @@
       copyText(text, "AIと仲良くなる文章をコピーしたよ🌈", "profile");
     }
 
+    function copyRuleText() {
+      saveProfileInputsOnly();
+      const text = buildRuleText();
+      document.getElementById("ruleTextBox").textContent = text;
+      copyText(text, "鑑定のお約束をコピーしたよ🌿", "rule");
+    }
+
     function copyAiPrompt() {
-      const selectionText = buildSelectionText();
-      if (!selectionText) {
+      const result = buildSelectionText();
+      if (!result) {
         showError("全部の項目を選んでからAI用をコピーしてね🐾");
         return;
       }
 
-      const profileText = buildProfileText();
+      const aiName = document.getElementById("p_ai").value.trim() || "（相棒の名前）";
+      const myName = document.getElementById("p_name").value.trim() || "（自分の名前）";
 
-      const aiPrompt = `${profileText}
-      return `${document.getElementById("p_ai").value.trim() || "（AIの名前）"}
-私は${document.getElementById("p_name").value.trim() || "（あなたの名前）"}だよ。
+      const aiPrompt = `${aiName}
+${myName}だよ。
 
-これは占いではなく、
-クライアントの本当の気持ちや願い、
-心の奥にあるズレや気づきのヒントを
-やさしく見つけていくためのサポートです。
-
-以下の内容をもとに、
-タロットを3枚引いた前提で
-総合的なメッセージだけを伝えてください。
-
-【ルール】
-・怖がらせない
-・断定しない
-・やさしい言葉で伝える
-・長くしすぎない
-・カード1枚ずつ細かく説明しない
-・総合的に、今の状態、本当の願い、気づきのヒントを伝える
-・最後に、やさしい一言を添える
-
-【クライアント情報】
-${selectionText}
-
-【出力してほしい形】
-① 今の状態
-② 心の奥にある本当の願いや気持ち
-③ 気づきのヒント
-④ やさしい一言`;
+${result.clientName}さんの鑑定をお願い！
+${result.answersText}
+だったよ。`;
 
       updatePreview();
       copyText(aiPrompt, "AIに送る文章をコピーしたよ✨");
@@ -758,6 +826,7 @@ ${selectionText}
 
     window.onload = function() {
       loadProfileInputs();
+      document.getElementById("ruleTextBox").textContent = buildRuleText();
     };
 
     document.addEventListener("change", updatePreview);
@@ -766,6 +835,7 @@ ${selectionText}
 
       if (profileIds.includes(e.target.id)) {
         saveProfileInputsOnly();
+        document.getElementById("ruleTextBox").textContent = buildRuleText();
       }
     });
   </script>
